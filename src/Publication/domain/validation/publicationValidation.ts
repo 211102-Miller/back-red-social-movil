@@ -35,4 +35,29 @@ export class ValidationCreatePublic{
         this.img_uer = img_uer,
         this.reactions = reactions
     }
+    
+}
+export class ValidatorId {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+    constructor(uuid:string) {
+        this.uuid = uuid
+    }
+}
+
+export class ValidatorUpdateDescription {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+    
+    @IsNotEmpty()
+    @IsString()
+    @Length(1, 500)
+    public description: string;
+
+    constructor(uuid:string, description:string) {
+        this.uuid = uuid,
+        this.description = description
+    }
 }
