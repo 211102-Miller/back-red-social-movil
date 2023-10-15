@@ -4,6 +4,7 @@ import "dotenv/config";
 import { userRoutes } from "./user/infraestructure/userRoutes";
 import { publicRoutes } from "./Publication/infraestructure/publicRoutes";
 import { reactionRoutes } from "./Reactions/infraestructure/reactionRoutes";
+import { commnetRoutes } from "./comment/infraestructure/commentsRoutes";
 
 import * as admin from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/public', publicRoutes);
 app.use('/api/v1/reaction', reactionRoutes);
+app.use('/api/v1/comment', commnetRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

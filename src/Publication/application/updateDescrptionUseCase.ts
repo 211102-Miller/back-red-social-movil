@@ -7,9 +7,11 @@ export class UpdateDescriptionUseCase{
     constructor(readonly publicRepository: PublicRepository){}
 
     async updateDescription(uuid:string, description:string):Promise<Public| null >{
+
         let post = new ValidatorUpdateDescription(uuid,description);
         const validation = await validate(post)
         console.log(validation.length)
+        
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
