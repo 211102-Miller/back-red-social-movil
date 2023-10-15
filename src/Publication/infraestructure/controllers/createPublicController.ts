@@ -16,13 +16,13 @@ export class CreatePublicController {
                 idUser,
                 description,
             } = req.body;
-            // Asegúrate de que un archivo fue enviado
+            // Asegúrate de que un archivo fue envia    do
             if (!req.files || !req.files.url_file) {
                 return res.status(400).send({
                     status: "error",
                     message: "No image file uploaded."
                 });
-            }
+            }   
             // Castear el archivo a UploadedFile (express-fileupload)
             const imgFile = req.files.url_file as UploadedFile;
             const miuuid: string = uuid();
@@ -42,7 +42,7 @@ export class CreatePublicController {
             } else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An error occurred while adding the book."
+                    message: "An error occurred while adding the publication."
                 });
             }
 

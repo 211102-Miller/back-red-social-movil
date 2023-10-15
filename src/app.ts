@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { userRoutes } from "./user/infraestructure/userRoutes";
-import { publicRoutes } from "./public/infraestructure/publicRoutes";
+import { publicRoutes } from "./Publication/infraestructure/publicRoutes";
 
 import * as admin from "firebase-admin";
 import { Bucket } from "@google-cloud/storage";
-import * as serviceAccount from "./public/movil-red-social-firebase-adminsdk-4g1rg-93651aacf0.json"
+import * as serviceAccount from "./Publication/movil-red-social-firebase-adminsdk-4g1rg-93651aacf0.json"
 import fileUpload from 'express-fileupload';
 
 
