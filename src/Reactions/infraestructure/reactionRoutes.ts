@@ -6,8 +6,12 @@ import { createReactionController,
     getReactionPublicController,
     getReactionByPublicController
 } from './dependencies';
+import { validateToken } from '../../helpers/verifiqueToken';
 
 export const reactionRoutes = express.Router();
+
+// Middleware para verificar el token en las rutas siguientes
+reactionRoutes.use(validateToken);
 
 
 reactionRoutes.post("/create", createReactionController.create.bind(createReactionController))

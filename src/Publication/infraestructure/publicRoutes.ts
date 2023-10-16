@@ -6,9 +6,11 @@ import { createPublicController,
     updateDescriptionController,
     deletePublicationController
 } from './dependencies';
+import { validateToken } from '../../helpers/verifiqueToken';
 
 export const publicRoutes = express.Router();
 
+publicRoutes.use(validateToken);
 
 publicRoutes.post("/create", createPublicController.run.bind(createPublicController))
 

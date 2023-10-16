@@ -6,7 +6,12 @@ import { createCommentController,
     deleteCommentController
 } from './dependencies';
 
+import { validateToken } from '../../helpers/verifiqueToken';
+
+
 export const commnetRoutes = express.Router();
+
+commnetRoutes.use(validateToken);
 
 commnetRoutes.post("/create", createCommentController.run.bind(createCommentController));
 
