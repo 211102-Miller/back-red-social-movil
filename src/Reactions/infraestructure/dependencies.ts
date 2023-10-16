@@ -15,6 +15,9 @@ import { GetReactionCommentController } from "./Controllers/getReactionCommentCo
 import { GetReactionPublicUseCase } from "../application/getReactionPublicUseCase";
 import { GetReactionPublicController } from "./Controllers/getReactionPublicController";
 
+import { GetReactionByPublicUseCase } from "../application/getReactionByPublicUseCase";
+import { GetReactionByPublicController } from "./Controllers/getReactionByPublicController";
+
 export const mysqlReactionRepository = new MysqlReactionRepository();
 
 
@@ -32,3 +35,6 @@ export const getReactionCommentController = new GetReactionCommentController(get
 
 export const getReactionPublicUseCase = new GetReactionPublicUseCase (mysqlReactionRepository);
 export const getReactionPublicController = new GetReactionPublicController(getReactionPublicUseCase);
+
+export const getReactionByPublicUseCase = new GetReactionByPublicUseCase(mysqlReactionRepository)
+export const getReactionByPublicController = new GetReactionByPublicController(getReactionByPublicUseCase);

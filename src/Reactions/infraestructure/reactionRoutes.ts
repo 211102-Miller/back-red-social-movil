@@ -3,7 +3,8 @@ import { createReactionController,
     deleteReactionController,
     getAllReactionControlller,
     getReactionCommentController,
-    getReactionPublicController
+    getReactionPublicController,
+    getReactionByPublicController
 } from './dependencies';
 
 export const reactionRoutes = express.Router();
@@ -18,3 +19,5 @@ reactionRoutes.get("/all", getAllReactionControlller.run.bind(getAllReactionCont
 reactionRoutes.get("/comment", getReactionCommentController.run.bind(getReactionCommentController))
 
 reactionRoutes.get("/public", getReactionPublicController.run.bind(getReactionPublicController))
+
+reactionRoutes.get("/public/:id_public", getReactionByPublicController.getPublic.bind(getReactionByPublicController))

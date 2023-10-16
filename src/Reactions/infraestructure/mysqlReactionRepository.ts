@@ -156,6 +156,33 @@ export class MysqlReactionRepository implements ReactionRepository{
             return null;
         }
     }
+
+    async getReactionByPublic(id_public: string): Promise<Reaction[] | null> {
+        try {
+            const sql = "SELECT * FROM reactions  WHERE id_public = ?";
+            const params: any[] = [id_public]; // Pasa idUser como argumento, no status
+    
+            const [result]: any = await query(sql, params);
+    
+            if (result && result.length > 0) {
+                // Mapea los resultados en objetos Public
+                const reactionUser = result.map((Data: any) => new Reaction(
+                    Data.uuid,
+                    Data.id_user,
+                    Data.id_public,
+                    Data.reaction,
+                    Data.type
+                ));
+    
+                return reactionUser;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            console.error("Error al obtener la lista de publicaciones del usuario:", error);
+            return null;
+        }
+    }
     
     
 }

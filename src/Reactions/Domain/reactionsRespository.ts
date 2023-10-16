@@ -18,4 +18,6 @@ export interface ReactionRepository{
     getReactionCommnet(type:string):Promise<Reaction[] | null>;
 
     getReactionPublic(type:string):Promise<Reaction[] | null>;
+
+    getReactionByPublic(id_public:string):Promise<Reaction[] | null>;
 }
