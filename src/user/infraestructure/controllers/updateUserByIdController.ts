@@ -10,12 +10,13 @@ export class UpdateUserByIdController{
             let {
                 uuid,
                 name,
-                last_name, 
+                last_name,
+                nick_name, 
                 phone_number,
                 email,
             } = req.body
         
-            let UpdateUserById = await this.updateUserByIdUseCase.update(uuid,name,last_name,phone_number,email)
+            let UpdateUserById = await this.updateUserByIdUseCase.update(uuid,name,last_name,nick_name,phone_number,email)
 
             if(UpdateUserById){
                 return res.status(200).send({

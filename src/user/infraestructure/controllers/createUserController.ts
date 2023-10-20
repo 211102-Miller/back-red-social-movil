@@ -13,6 +13,7 @@ export class CreateUserController {
             let {
                 name,
                 last_name,
+                nick_name,
                 phone_number,
                 email,
                 password,
@@ -22,6 +23,7 @@ export class CreateUserController {
             let registerUser = await this.createUserUseCase.run(
                 name,
                 last_name,
+                nick_name,
                 phone_number,
                 email,
                 password,
@@ -38,6 +40,7 @@ export class CreateUserController {
                     data: {
                         id: registerUser.uuid,
                         name: registerUser.name,
+                        nick_name: registerUser.nick_name,
                         email: registerUser.email,
                         phone_number: registerUser.phone_number
                     }

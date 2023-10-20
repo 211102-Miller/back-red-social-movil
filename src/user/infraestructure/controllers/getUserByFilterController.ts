@@ -10,11 +10,12 @@ export class GetUserByFilterController {
             let {
                 filter,
                 name,
+                nick_name,
                 phone_number,
                 email,
-            } = req.query
+            } = req.params
 
-            let getUserByFilter = await this.getUserByFilterUseCase.run(filter as string, email as string, name as string, phone_number as string)
+            let getUserByFilter = await this.getUserByFilterUseCase.run(filter as string, email as string, name as string, nick_name as string,phone_number as string)
 
             if(getUserByFilter){
                 return res.status(200).send({
@@ -32,20 +33,7 @@ export class GetUserByFilterController {
 
         } catch (error) {
             // Manejo de errores específicos
-            if (error instanceof Error) {
-                if (error.message.startsWith('[')) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "Validation failed",
-                        errors: JSON.parse(error.message)
-                    });
-                }
-            }
-
-            return res.status(500).send({
-                status: "error",
-                message: "An error occurred while listing the user."
-            });   
+            return null; 
         }
     }
 }

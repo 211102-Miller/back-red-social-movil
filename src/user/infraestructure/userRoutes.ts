@@ -18,7 +18,7 @@ userRoutes.post("/register", createUserController.run.bind(createUserController)
 
 
 // Middleware para verificar el token en las rutas siguientes
-userRoutes.use(validateToken);
+//userRoutes.use(validateToken);
 
 userRoutes.get("/all", getAllUsersController.allUser.bind(getAllUsersController))
 
@@ -30,4 +30,4 @@ userRoutes.delete("/:uuid", deleteUserController.deleteUser.bind(deleteUserContr
 
 userRoutes.put("/new_password", updatePasswordController.run.bind(updatePasswordController))
 
-userRoutes.get("/filter", getUserByFilterController.run.bind(getUserByFilterController))
+userRoutes.get("/filters/a", getUserByFilterController.run.bind(getUserByFilterController))

@@ -18,6 +18,11 @@ export class ValidatorCreateUser {
 
     @IsNotEmpty()
     @IsString()
+    @Length(1, 12)
+    public nick_name: string;
+
+    @IsNotEmpty()
+    @IsString()
     @Length(10) 
     public phone_number: string;
 
@@ -38,6 +43,7 @@ export class ValidatorCreateUser {
         uuid: string,
         name: string,
         last_name: string,
+        nick_name:string,
         phone_number: string,
         email: string,
         password: string,
@@ -46,6 +52,7 @@ export class ValidatorCreateUser {
         this.uuid = uuid;
         this.name = name;
         this.last_name = last_name;
+        this.nick_name = nick_name;
         this.phone_number = phone_number;
         this.email = email;
         this.password = password;
@@ -80,6 +87,11 @@ export class ValidatorUpdate {
 
     @IsOptional()
     @IsString()
+    @Length(1, 12)
+    public nick_name?: string;
+
+    @IsOptional()
+    @IsString()
     @Length(10)  
     public phone_number?: string;
 
@@ -91,11 +103,14 @@ export class ValidatorUpdate {
         uuid: string,
         name?: string,
         last_name?: string,
+        nick_name?:string,
         phone_number?: string,
         email?: string,) {
+            
         this.uuid = uuid;
         this.name = name;
         this.last_name = last_name;
+        this.nick_name = nick_name;
         this.phone_number = phone_number
         this.email = email;
     }
@@ -141,7 +156,7 @@ export class ValidateLogin {
 export class ValidatorFilter {
     @IsNotEmpty()
     @IsString()
-    @IsIn(['email', 'name', 'phone_number'])
+    @IsIn(['email', 'name', 'nick-name','phone_number'])
     public filter: string;
 
     @ValidateIf(o => o.filter === 'email')
@@ -154,20 +169,26 @@ export class ValidatorFilter {
     @IsString()
     public name?: string;
 
+    @ValidateIf(o => o.filter === 'nick-name')
+    @IsNotEmpty()
+    @IsString()
+    public nick_name?: string;
+
     @ValidateIf(o => o.filter === 'phone_number')
     @IsNotEmpty()
-    
     public phone_number?: string;
 
     constructor(
         filter: string,
         email?: string,
         name?: string,
+        nick_name?: string,
         phone_number?: string
     ) {
         this.filter = filter;
         this.email = email;
         this.name = name;
+        this.nick_name = nick_name;
         this.phone_number = phone_number;
     }
 }

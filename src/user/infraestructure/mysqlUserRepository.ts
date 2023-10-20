@@ -8,15 +8,16 @@ import { tokenSigIn } from "../../helpers/token";
 
 export class MysqlUserRepository implements UserRepository{
 
-    async createUser(uuid: string, name: string, last_name: string, phone_number: string, email: string, password: string, status: boolean): Promise<string | User | Error | null> {
+    async createUser(uuid: string, name: string, last_name: string,nick_name:string, phone_number: string, email: string, password: string, status: boolean): Promise<string | User | Error | null> {
         try {
+            
             
             await isEmailRegistered(email)
            
-            let sql = "INSERT INTO users(uuid, name, last_name, phone_number , email, password,status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            const params: any[] = [uuid, name, last_name, phone_number, email, password, status];
+            let sql = "INSERT INTO users(uuid, name, last_name, nick_name,phone_number , email, password,status) VALUES (?, ?, ?, ?, ? , ?, ?, ?)";
+            const params: any[] = [uuid, name, last_name,nick_name, phone_number, email, password, status];
             const [result]: any = await query(sql, params);
-            return new User(uuid, name, last_name, phone_number, email, password, status);
+            return new User(uuid, name, last_name, nick_name,phone_number, email, password, status);
         } catch (error) {
             console.error("Error adding review:", error);
             return error as Error;
@@ -29,7 +30,7 @@ export class MysqlUserRepository implements UserRepository{
             if (!Array.isArray(rows)) {
                 throw new Error('Rows is not an array'); // o maneja este caso como prefieras
             }
-            const users: User[] = rows.map(row => new User(row.uuid, row.name, row.last_name, row.phone_number, row.email, row.password, row.status));
+            const users: User[] = rows.map(row => new User(row.uuid, row.name, row.last_name,row.nick_name,row.phone_number, row.email, row.password, row.status));
             return users
         } catch (error) {
             console.error(error);
@@ -45,17 +46,18 @@ export class MysqlUserRepository implements UserRepository{
             if (!rows || rows.length === 0) return null; // Si no hay resultados, retornamos null        
             const row = rows[0]; // Tomamos el primer resultado (ya que uuid debería ser único)
             // Retornamos una nueva instancia de User con los datos obtenidos
-            return new User(row.uuid, row.name, row.last_name, row.phone_number, row.email, row.password,row.status);
+            return new User(row.uuid, row.name, row.last_name, row.nick_name,row.phone_number, row.email, row.password,row.status);
         } catch (error) {
             console.error(error);
             return null; // En caso de error, retornamos null
         }
     }
-    async updateUserById(uuid: string, name?: string, last_name?: string, phone_number?: string, email?: string): Promise<User | null> {
+    async updateUserById(uuid: string, name?: string, last_name?: string, nick_name?: string,phone_number?: string, email?: string): Promise<User | null> {
         
         const updates: { [key: string]: string } = {};
         if (name !== undefined) updates.name = name;
         if (last_name !== undefined) updates.last_name = last_name;
+        if (nick_name !== undefined) updates.nick_name = nick_name;
         if (phone_number !== undefined) updates.phone_number = phone_number;
         if (email !== undefined) updates.email = email;
 
@@ -79,6 +81,7 @@ export class MysqlUserRepository implements UserRepository{
                 updatedRows[0].uuid,
                 updatedRows[0].name,
                 updatedRows[0].last_name,
+                updatedRows[0].nick_name,
                 updatedRows[0].phone_number,
                 updatedRows[0].email,
                 updatedRows[0].password,
@@ -125,6 +128,7 @@ export class MysqlUserRepository implements UserRepository{
                 updatedRows[0].uuid,
                 updatedRows[0].name,
                 updatedRows[0].last_name,
+                updatedRows[0].nick_name,
                 updatedRows[0].phone_number,
                 updatedRows[0].email,
                 updatedRows[0].password,
@@ -170,6 +174,7 @@ export class MysqlUserRepository implements UserRepository{
         filter: string,
         email?: string | undefined,
         name?: string | undefined,
+        nick_name?:string | undefined,
         phone_number?: string | undefined
     ): Promise<User[] | null> {
         try {
@@ -191,6 +196,11 @@ export class MysqlUserRepository implements UserRepository{
                     sql = 'SELECT * FROM users WHERE phone_number = ?'; // Se ha removido LIMIT 1
                     value = phone_number;
                     break;
+                case 'nick_name':
+                    if (!nick_name) throw new Error('Phone number is required when filter is phone_number');
+                    sql = 'SELECT * FROM users WHERE nick_name = ?'; // Se ha removido LIMIT 1
+                    value = phone_number;
+                    break;
                 default:
                     throw new Error('Invalid filter type');
             }
@@ -200,7 +210,7 @@ export class MysqlUserRepository implements UserRepository{
             if (rows.length === 0) {
                 return null;
             }            
-            return rows.map((row: User) => new User(row.uuid, row.name, row.last_name, row.phone_number, row.email, row.password, row.status));
+            return rows.map((row: User) => new User(row.uuid, row.name, row.last_name,row.nick_name, row.phone_number, row.email, row.password, row.status));
 
         } catch (error) {
             console.error(error);
