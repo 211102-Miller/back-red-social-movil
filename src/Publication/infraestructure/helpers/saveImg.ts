@@ -1,15 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
 import * as admin from 'firebase-admin';
 
-
-/**
- * Sube un archivo a Firebase Storage y devuelve su URL pública.
- *
- * @param {UploadedFile} file El archivo a subir.
- * @returns {Promise<string>} La URL pública del archivo subido.
- */
-
-async function uploadToFirebase(file: UploadedFile): Promise<string> {
+async function uploadToFirebase(file: UploadedFile, type_file: string): Promise<string> {
     const bucket = admin.storage().bucket();
 
     return new Promise((resolve, reject) => {
@@ -19,12 +11,14 @@ async function uploadToFirebase(file: UploadedFile): Promise<string> {
 
         const blobStream = blob.createWriteStream({
             metadata: {
-                contentType: file.mimetype,
+                contentType: type_file, // Usa el tipo de archivo proporcionado
             },
         });
+
         blobStream.on('error', (error) => {
             reject("Error uploading to Firebase Storage: " + error);
         });
+
         blobStream.on('finish', () => {
             const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
             resolve(publicUrl);
@@ -34,4 +28,4 @@ async function uploadToFirebase(file: UploadedFile): Promise<string> {
     });
 }
 
-export default uploadToFirebase; 
+export default uploadToFirebase;

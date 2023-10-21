@@ -6,7 +6,7 @@ export interface PublicRepository{
         idUser:string,
         description:string,
         url_file:string,
-        reactions: number,
+        type_file: string,
         
     ):Promise<Public | null>;
 

@@ -12,11 +12,11 @@ export class CreatePublicUseCase {
         idUser: string,
         description: string,
         url_file: string,
-        reactions:number
+        type_file:string
 
     ): Promise<Public | null> {
 
-        let post = new ValidationCreatePublic(uuid,idUser,description,url_file,reactions)
+        let post = new ValidationCreatePublic(uuid,idUser,description,url_file,type_file)
         const validation = await validate(post)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
@@ -28,7 +28,7 @@ export class CreatePublicUseCase {
                 idUser,
                 description,
                 url_file,
-                reactions
+                type_file
             )
             return newPublic;
         } catch (error) {

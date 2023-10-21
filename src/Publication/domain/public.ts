@@ -4,6 +4,6 @@ export class Public{
         public idUser: string,
         public description: string,
         public img_file: string,
-        public reactions: number,
+        public type_file: string,
     ){}
 }

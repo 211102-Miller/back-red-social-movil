@@ -6,7 +6,7 @@ import { PublicRepository } from "../domain/publicRepository";
 
 export class MysqlPublicRepository implements PublicRepository{
 
-    async createPublicFile(uuid: string, idUser: string, description: string, url_file: string, reactions: number): Promise<Public | null> {
+    async createPublicFile(uuid: string, idUser: string, description: string, url_file: string, type_file: string): Promise<Public | null> {
         try {
             // Primero, verifica si el usuario con el UUID existe en la base de datos
             const userCheckSql = `
@@ -26,13 +26,13 @@ export class MysqlPublicRepository implements PublicRepository{
 
             // El usuario existe, ahora puedes insertar el nuevo registro en la tabla "public"
             const sql = `
-                INSERT INTO public (uuid, idUser, description, url_file, reactions)
+                INSERT INTO public (uuid, idUser, description, url_file, type_file)
                 VALUES (?, ?, ?, ?, ?);
             `;
-            const params = [uuid, idUser, description, url_file, reactions];
+            const params = [uuid, idUser, description, url_file, type_file];
             const [result]: any = await query(sql, params);
 
-            const newPublic: Public = new Public(uuid, idUser, description, url_file, reactions);
+            const newPublic: Public = new Public(uuid, idUser, description, url_file, type_file);
             return newPublic;
 
         } catch (error) {
@@ -55,7 +55,7 @@ export class MysqlPublicRepository implements PublicRepository{
                     row.idUser,
                     row.description,
                     row.url_file,
-                    row.reactions,
+                    row.type_file,
                 );
             });
 
@@ -83,7 +83,7 @@ export class MysqlPublicRepository implements PublicRepository{
                 row.idUser,
                 row.description,
                 row.url_file,
-                row.reactions,
+                row.type_file,
             );
 
             return publics;
@@ -107,7 +107,7 @@ export class MysqlPublicRepository implements PublicRepository{
                     publicData.idUser,
                     publicData.description,
                     publicData.url_file,
-                    publicData.reactions
+                    publicData.type_file
                 ));
     
                 return publicsUser;
@@ -136,7 +136,7 @@ export class MysqlPublicRepository implements PublicRepository{
                 updatedRows[0].idUserName,
                 updatedRows[0].description,
                 updatedRows[0].url_file,
-                updatedRows[0].reactions,
+                updatedRows[0].type_file,
             );
     
             return updatedDescription;

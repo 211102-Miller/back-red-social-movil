@@ -7,13 +7,15 @@ dotenv.config(); // Aquí se ha corregido el nombre
 
 
 const config = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    database: process.env.DB_DATABASE || 'mvsocial',
-    password: process.env.DB_PASSWORD || 'LopezTorres2001',
+    host:'containers-us-west-104.railway.app',
+    port: 7859, // // Agrega el puerto de la base de datos
+    user:'root',
+    database:'railway',
+    password:'U5C6auJmFbu1XhWJrtOq',
     waitForConnections: true,
     connectionLimit: 10,
 };
+
 
 // Crear el pool de conexiones
 const pool = mysql.createPool(config);

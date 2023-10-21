@@ -20,20 +20,21 @@ export class ValidationCreatePublic{
 
 
     @IsNotEmpty()
-    @IsNumber()
-    public reactions: number;
+    @IsString()
+    public type_file: string;
+
     constructor(
         uuid: string,
         idUser: string,
         description: string,
         img_uer: string,
-        reactions: number,
+        type_file: string,
     ) {
         this.uuid = uuid,
         this.idUser = idUser,
         this.description = description,
         this.img_uer = img_uer,
-        this.reactions = reactions
+        this.type_file = type_file
     }
     
 }
