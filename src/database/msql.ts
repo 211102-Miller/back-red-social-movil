@@ -1,9 +1,8 @@
-import dotenv from "dotenv"; // Aquí se ha corregido el nombre
+ // Aquí se ha corregido el nombre
 import mysql from "mysql2/promise";
 import { Signale } from "signale";
 
-const signale = new Signale();
-dotenv.config(); // Aquí se ha corregido el nombre
+const signale = new Signale();// Aquí se ha corregido el nombre
 
 
 const config = {

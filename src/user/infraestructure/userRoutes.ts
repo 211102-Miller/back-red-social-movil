@@ -16,9 +16,8 @@ userRoutes.post("/login", loginUserController.run.bind(loginUserController))
 
 userRoutes.post("/register", createUserController.run.bind(createUserController))
 
-
 // Middleware para verificar el token en las rutas siguientes
-//userRoutes.use(validateToken);
+userRoutes.use(validateToken);
 
 userRoutes.get("/all", getAllUsersController.allUser.bind(getAllUsersController))
 
