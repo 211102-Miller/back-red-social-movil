@@ -8,7 +8,7 @@ export class CreatePublicController {
 
     constructor(readonly createPublicUseCase: CreatePublicUseCase) { }
 
-    async run(req: Request , res: Response) {
+    async run(req: Request, res: Response) {
         try {
             let {
                 idUser,
@@ -20,16 +20,16 @@ export class CreatePublicController {
                     status: "error",
                     message: "No image file uploaded."
                 });
-            }   
+            }
             // Castear el archivo a UploadedFile (express-fileupload)
             const imgFile = req.files.url_file as UploadedFile;
-            
+
             // Genera un nombre único para el archivo basado en la fecha y el nombre original
             const uniqueName = `${Date.now()}-${imgFile.name}`;
             // Obtiene la extensión del archivo desde su nombre
             const fileExtension = imgFile.name.split('.').pop();
-            // Determina el tipo de archivo basado en la extensión
             let type_file = '';
+
             if (fileExtension) {
                 switch (fileExtension.toLowerCase()) {
                     case 'png':
@@ -42,15 +42,33 @@ export class CreatePublicController {
                     case 'mp4':
                         type_file = 'video/mp4';
                         break;
+                    case 'gif':
+                        type_file = 'image/gif';
+                        break;
+                    case 'mp3':
+                        type_file = 'audio/mpeg';
+                        break;
+                    case 'wav':
+                        type_file = 'audio/wav';
+                        break;
+                    case 'avi':
+                        type_file = 'video/x-msvideo';
+                        break;
+                    case 'mov':
+                        type_file = 'video/quicktime';
+                        break;
+                    case 'oog':
+                        type_file = 'audio/ogg'; // Agrega esta línea para archivos "oog"
+                        break;
                     // Agrega más extensiones y tipos de archivo según tus necesidades
                 }
             }
-            
+
             const miuuid: string = uuid();
             const url_file = await uploadToFirebase(imgFile, type_file);
-            
+
             let newPublic = await this.createPublicUseCase.create(miuuid, idUser, description, url_file, type_file);
-            
+
             if (newPublic) {
                 return res.status(201).send({
                     status: "success",
@@ -64,7 +82,7 @@ export class CreatePublicController {
                     message: "An error occurred while adding the publication."
                 });
             }
-            
+
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message.startsWith('[')) {
@@ -74,7 +92,7 @@ export class CreatePublicController {
                         errors: JSON.parse(error.message)
                     });
                 }
-            } 
+            }
             return res.status(500).send({
                 status: "error",
                 message: "An error occurred while adding the publication."
