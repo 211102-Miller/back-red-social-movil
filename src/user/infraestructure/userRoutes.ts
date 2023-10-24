@@ -6,7 +6,8 @@ import { createUserController,
     deleteUserController,
     updatePasswordController,
     loginUserController,
-    getUserByFilterController
+    getUserByFilterController,
+    getByEmailController
 } from './depencies';
 import { validateToken } from '../../helpers/verifiqueToken';
 
@@ -19,7 +20,9 @@ userRoutes.post("/register", createUserController.run.bind(createUserController)
 // Middleware para verificar el token en las rutas siguientes
 userRoutes.use(validateToken);
 
-userRoutes.get("/all", getAllUsersController.allUser.bind(getAllUsersController))
+userRoutes.get("/email", getByEmailController.get.bind(getByEmailController));
+
+userRoutes.get("/all", getAllUsersController.allUser.bind(getAllUsersController));
 
 userRoutes.get("/:uuid", getByIdCoontroller.run.bind(getByIdCoontroller))
 

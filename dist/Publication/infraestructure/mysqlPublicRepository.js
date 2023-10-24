@@ -13,29 +13,27 @@ exports.MysqlPublicRepository = void 0;
 const msql_1 = require("../../database/msql");
 const public_1 = require("../domain/public");
 class MysqlPublicRepository {
-    createPublicFile(uuid, idUser, description, url_file, type_file) {
+    createPublicFile(uuid, idUser, description, url_file, type_file, userName, userNickName) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Primero, verifica si el usuario con el UUID existe en la base de datos
                 const userCheckSql = `
-                SELECT * FROM users WHERE uuid = ?;
+                SELECT name, nick_name FROM users WHERE uuid = ?;
             `;
                 const userCheckParams = [idUser];
-                console.log(userCheckParams);
                 const [userResult] = yield (0, msql_1.query)(userCheckSql, userCheckParams);
                 if (userResult.length === 0) {
                     // El usuario con el UUID proporcionado no existe en la base de datos
-                    console.log("dasdasdasd");
                     return null;
                 }
                 // El usuario existe, ahora puedes insertar el nuevo registro en la tabla "public"
                 const sql = `
-                INSERT INTO public (uuid, idUser, description, url_file, type_file)
-                VALUES (?, ?, ?, ?, ?);
+                INSERT INTO public (uuid, idUser, description, url_file, type_file, userName, userNickName)
+                VALUES (?, ?, ?, ?, ?, ?, ?);
             `;
-                const params = [uuid, idUser, description, url_file, type_file];
+                const params = [uuid, idUser, description, url_file, type_file, userName, userNickName];
                 const [result] = yield (0, msql_1.query)(sql, params);
-                const newPublic = new public_1.Public(uuid, idUser, description, url_file, type_file);
+                const newPublic = new public_1.Public(uuid, idUser, description, url_file, type_file, userName, userNickName);
                 return newPublic;
             }
             catch (error) {
@@ -53,7 +51,7 @@ class MysqlPublicRepository {
                     return null;
                 }
                 const books = rows.map(row => {
-                    return new public_1.Public(row.uuid, row.idUser, row.description, row.url_file, row.type_file);
+                    return new public_1.Public(row.uuid, row.idUser, row.description, row.url_file, row.type_file, row.userName, row.userNickName);
                 });
                 return books;
             }
@@ -73,7 +71,7 @@ class MysqlPublicRepository {
                     return null;
                 }
                 const row = rows[0]; // Como estamos buscando por ID, sólo debe haber una coincidencia
-                const publics = new public_1.Public(row.uuid, row.idUser, row.description, row.url_file, row.type_file);
+                const publics = new public_1.Public(row.uuid, row.idUser, row.description, row.url_file, row.type_file, row.userName, row.userNickName);
                 return publics;
             }
             catch (error) {
@@ -90,7 +88,7 @@ class MysqlPublicRepository {
                 const [result] = yield (0, msql_1.query)(sql, params);
                 if (result && result.length > 0) {
                     // Mapea los resultados en objetos Public
-                    const publicsUser = result.map((publicData) => new public_1.Public(publicData.uuid, publicData.idUser, publicData.description, publicData.url_file, publicData.type_file));
+                    const publicsUser = result.map((publicData) => new public_1.Public(publicData.uuid, publicData.idUser, publicData.description, publicData.url_file, publicData.type_file, publicData.userName, publicData.userNickName));
                     return publicsUser;
                 }
                 else {
@@ -115,7 +113,7 @@ class MysqlPublicRepository {
                 const [updatedRows] = yield (0, msql_1.query)('SELECT * FROM public WHERE uuid = ?', [uuid]);
                 if (updatedRows.length === 0)
                     return null;
-                const updatedDescription = new public_1.Public(updatedRows[0].uuid, updatedRows[0].idUserName, updatedRows[0].description, updatedRows[0].url_file, updatedRows[0].type_file);
+                const updatedDescription = new public_1.Public(updatedRows[0].uuid, updatedRows[0].idUserName, updatedRows[0].description, updatedRows[0].url_file, updatedRows[0].type_file, updatedRows[0].userName, updatedRows[0].userNickName);
                 return updatedDescription;
             }
             catch (error) {

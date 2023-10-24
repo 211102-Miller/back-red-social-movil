@@ -12,7 +12,9 @@ export class CreatePublicUseCase {
         idUser: string,
         description: string,
         url_file: string,
-        type_file:string
+        type_file:string,
+        userName:string,
+        userNickName:string
 
     ): Promise<Public | null> {
 
@@ -28,7 +30,9 @@ export class CreatePublicUseCase {
                 idUser,
                 description,
                 url_file,
-                type_file
+                type_file,
+                userName,
+                userNickName
             )
             return newPublic;
         } catch (error) {

@@ -7,7 +7,8 @@ export interface PublicRepository{
         description:string,
         url_file:string,
         type_file: string,
-        
+        userName:string,
+        userNickName:string
     ):Promise<Public | null>;
 
 

@@ -16,13 +16,14 @@ exports.CreatePublicController = void 0;
 const uuid_1 = require("uuid");
 const saveImg_1 = __importDefault(require("../helpers/saveImg"));
 class CreatePublicController {
-    constructor(createPublicUseCase) {
+    constructor(createPublicUseCase, getByIdUseCase) {
         this.createPublicUseCase = createPublicUseCase;
+        this.getByIdUseCase = getByIdUseCase;
     }
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { idUser, description, } = req.body;
+                let { idUser, description } = req.body;
                 // Asegúrate de que un archivo fue enviado
                 if (!req.files || !req.files.url_file) {
                     return res.status(400).send({
@@ -36,7 +37,6 @@ class CreatePublicController {
                 const uniqueName = `${Date.now()}-${imgFile.name}`;
                 // Obtiene la extensión del archivo desde su nombre
                 const fileExtension = imgFile.name.split('.').pop();
-                // Determina el tipo de archivo basado en la extensión
                 let type_file = '';
                 if (fileExtension) {
                     switch (fileExtension.toLowerCase()) {
@@ -50,24 +50,59 @@ class CreatePublicController {
                         case 'mp4':
                             type_file = 'video/mp4';
                             break;
-                        // Agrega más extensiones y tipos de archivo según tus necesidades
+                        case 'gif':
+                            type_file = 'image/gif';
+                            break;
+                        case 'mp3':
+                            type_file = 'audio/mpeg';
+                            break;
+                        case 'wav':
+                            type_file = 'audio/wav';
+                            break;
+                        case 'avi':
+                            type_file = 'video/x-msvideo';
+                            break;
+                        case 'mov':
+                            type_file = 'video/quicktime';
+                            break;
+                        case 'oog':
+                            type_file = 'audio/ogg'; // Agrega esta línea para archivos "oog"
+                            break;
+                        case 'aac':
+                            type_file = 'audio/aac'; // Agrega el tipo de archivo AAC
+                            break;
                     }
                 }
                 const miuuid = (0, uuid_1.v4)();
-                const url_file = yield (0, saveImg_1.default)(imgFile, type_file);
-                let newPublic = yield this.createPublicUseCase.create(miuuid, idUser, description, url_file, type_file);
-                if (newPublic) {
-                    return res.status(201).send({
-                        status: "success",
-                        data: {
-                            new_Public: newPublic
-                        }
-                    });
+                // Obtén información del usuario utilizando GetByIdUseCase
+                const getUserInfo = yield this.getByIdUseCase.getId(idUser);
+                if (getUserInfo) {
+                    const url_file = yield (0, saveImg_1.default)(imgFile, type_file);
+                    console.log('userName:', getUserInfo.name);
+                    console.log('userNickName:', getUserInfo.nick_name);
+                    // Llama a createPublicFile con información del usuario
+                    let newPublic = yield this.createPublicUseCase.create(miuuid, idUser, description, url_file, type_file, getUserInfo.name, // Nombre del usuario
+                    getUserInfo.nick_name // Nickname del usuario
+                    );
+                    if (newPublic) {
+                        return res.status(201).send({
+                            status: "success",
+                            data: {
+                                new_Public: newPublic
+                            }
+                        });
+                    }
+                    else {
+                        return res.status(500).send({
+                            status: "error",
+                            message: "An error occurred while adding the publication."
+                        });
+                    }
                 }
                 else {
-                    return res.status(500).send({
+                    return res.status(404).send({
                         status: "error",
-                        message: "An error occurred while adding the publication."
+                        message: "User not found."
                     });
                 }
             }

@@ -5,5 +5,7 @@ export class Public{
         public description: string,
         public img_file: string,
         public type_file: string,
+        public userName:string,
+        public userNickName:string
     ){}
 }

@@ -17,8 +17,8 @@ class UpdatePasswordController {
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { uuid, password, } = req.body;
-                let updatePasswor = yield this.updatePasswordUseCase.updatePassword(uuid, password);
+                let { email, password, } = req.body;
+                let updatePasswor = yield this.updatePasswordUseCase.updatePassword(email, password);
                 if (updatePasswor) {
                     return res.status(200).send({
                         status: "succes",

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePublicationController = exports.detelePublicationUseCase = exports.updateDescriptionController = exports.updateDescriptionUseCase = exports.getByUserPublicationController = exports.getByUserPublicationUseCase = exports.getByPublicationController = exports.getByPublicationUseCase = exports.geAllPublicationsController = exports.getAllPublicationsUseCase = exports.createPublicController = exports.createPublicUseCase = exports.mysqlPublicRepository = void 0;
+exports.deletePublicationController = exports.detelePublicationUseCase = exports.updateDescriptionController = exports.updateDescriptionUseCase = exports.getByUserPublicationController = exports.getByUserPublicationUseCase = exports.getByPublicationController = exports.getByPublicationUseCase = exports.geAllPublicationsController = exports.getAllPublicationsUseCase = exports.createPublicController = exports.createPublicUseCase = exports.getByIdUseCase = exports.mysqlUserRepository = exports.mysqlPublicRepository = void 0;
 const mysqlPublicRepository_1 = require("./mysqlPublicRepository");
 const createPublicUseCase_1 = require("../application/createPublicUseCase");
 const createPublicController_1 = require("./controllers/createPublicController");
@@ -14,9 +14,13 @@ const updateDescrptionUseCase_1 = require("../application/updateDescrptionUseCas
 const updateDescriptionController_1 = require("./controllers/updateDescriptionController");
 const deletePublicationUseCase_1 = require("../application/deletePublicationUseCase");
 const deletePublicationController_1 = require("./controllers/deletePublicationController");
+const getByIdUseCase_1 = require("../../user/application/getByIdUseCase");
+const mysqlUserRepository_1 = require("../../user/infraestructure/mysqlUserRepository");
 exports.mysqlPublicRepository = new mysqlPublicRepository_1.MysqlPublicRepository();
+exports.mysqlUserRepository = new mysqlUserRepository_1.MysqlUserRepository();
+exports.getByIdUseCase = new getByIdUseCase_1.GetByIdUseCase(exports.mysqlUserRepository);
 exports.createPublicUseCase = new createPublicUseCase_1.CreatePublicUseCase(exports.mysqlPublicRepository);
-exports.createPublicController = new createPublicController_1.CreatePublicController(exports.createPublicUseCase);
+exports.createPublicController = new createPublicController_1.CreatePublicController(exports.createPublicUseCase, exports.getByIdUseCase);
 exports.getAllPublicationsUseCase = new getAllPublicationsUseCase_1.GetAllPublicationsUseCase(exports.mysqlPublicRepository);
 exports.geAllPublicationsController = new getAllPublicationsController_1.GetAllPublicationsController(exports.getAllPublicationsUseCase);
 exports.getByPublicationUseCase = new getByPublicationUseCase_1.GetByPublicationUseCase(exports.mysqlPublicRepository);

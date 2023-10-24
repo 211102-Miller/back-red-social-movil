@@ -16,15 +16,15 @@ class UpdatePasswordUseCase {
     constructor(userRepository) {
         this.userRepository = userRepository;
     }
-    updatePassword(uuid, password) {
+    updatePassword(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            let post = new user_1.ValidatorupdatePassword(uuid, password);
+            let post = new user_1.ValidatorupdatePassword(email, password);
             const validation = yield (0, class_validator_1.validate)(post);
             if (validation.length > 0) {
                 throw new Error(JSON.stringify(validation));
             }
             try {
-                const update = yield this.userRepository.updatePassword(uuid, password);
+                const update = yield this.userRepository.updatePassword(email, password);
                 return update;
             }
             catch (error) {

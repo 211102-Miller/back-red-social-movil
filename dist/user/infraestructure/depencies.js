@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserByFilterController = exports.getUserByFilterUseCase = exports.loginUserController = exports.loginUserUseCase = exports.updatePasswordController = exports.updatePasswordUseCase = exports.deleteUserController = exports.deleteUserUseCase = exports.updateUserByIdController = exports.updateUserByIdUseCase = exports.getByIdCoontroller = exports.getByIdUseCase = exports.getAllUsersController = exports.getAllUsersUseCase = exports.createUserController = exports.createUserUseCase = exports.mysqlUserRepository = void 0;
+exports.loginUserController = exports.loginUserUseCase = exports.getByEmailController = exports.getByEmialUseCase = exports.getUserByFilterController = exports.getUserByFilterUseCase = exports.updatePasswordController = exports.updatePasswordUseCase = exports.deleteUserController = exports.deleteUserUseCase = exports.updateUserByIdController = exports.updateUserByIdUseCase = exports.getByIdCoontroller = exports.getByIdUseCase = exports.getAllUsersController = exports.getAllUsersUseCase = exports.createUserController = exports.createUserUseCase = exports.mysqlUserRepository = void 0;
 const mysqlUserRepository_1 = require("./mysqlUserRepository");
 const createUserUseCase_1 = require("../application/createUserUseCase");
 const getAllUsersUseCase_1 = require("../application/getAllUsersUseCase");
@@ -18,6 +18,8 @@ const loginUserUseCase_1 = require("../application/loginUserUseCase");
 const loginUserController_1 = require("./controllers/loginUserController");
 const getUserByFilterUseCase_1 = require("../application/getUserByFilterUseCase");
 const getUserByFilterController_1 = require("./controllers/getUserByFilterController");
+const getByEmailUseCase_1 = require("../application/getByEmailUseCase");
+const getByEmailController_1 = require("./controllers/getByEmailController");
 exports.mysqlUserRepository = new mysqlUserRepository_1.MysqlUserRepository();
 exports.createUserUseCase = new createUserUseCase_1.CreateUserUseCase(exports.mysqlUserRepository);
 exports.createUserController = new createUserController_1.CreateUserController(exports.createUserUseCase);
@@ -31,7 +33,9 @@ exports.deleteUserUseCase = new deleteUserUseCase_1.DeleteUserUseCase(exports.my
 exports.deleteUserController = new deleteUserController_1.DeleteUserController(exports.deleteUserUseCase);
 exports.updatePasswordUseCase = new updatePasswordUseCase_1.UpdatePasswordUseCase(exports.mysqlUserRepository);
 exports.updatePasswordController = new updatePasswordController_1.UpdatePasswordController(exports.updatePasswordUseCase);
-exports.loginUserUseCase = new loginUserUseCase_1.LoginUserUseCase(exports.mysqlUserRepository);
-exports.loginUserController = new loginUserController_1.LoginUserController(exports.loginUserUseCase);
 exports.getUserByFilterUseCase = new getUserByFilterUseCase_1.GetUserByFilterUseCase(exports.mysqlUserRepository);
 exports.getUserByFilterController = new getUserByFilterController_1.GetUserByFilterController(exports.getUserByFilterUseCase);
+exports.getByEmialUseCase = new getByEmailUseCase_1.GetByEmialUseCase(exports.mysqlUserRepository);
+exports.getByEmailController = new getByEmailController_1.GetByEmailController(exports.getByEmialUseCase);
+exports.loginUserUseCase = new loginUserUseCase_1.LoginUserUseCase(exports.mysqlUserRepository);
+exports.loginUserController = new loginUserController_1.LoginUserController(exports.loginUserUseCase, exports.getByEmialUseCase);

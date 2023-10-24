@@ -119,19 +119,31 @@ export class ValidatorUpdate {
 export class ValidatorupdatePassword {
 
     @IsNotEmpty()
-    @IsUUID()
-    public uuid: string;
+    @IsEmail()
+    public email: string;
 
     @IsNotEmpty()
     @IsString()
     public password: string;
 
     constructor(
-        uuid: string,
+        email: string,
         password: string
     ) {
-        this.uuid = uuid;
+        this.email = email;
         this.password = password;
+    }
+
+}
+export class ValidateEmail{
+    @IsNotEmpty()
+    @IsEmail()
+    public email: string;
+
+    constructor(
+        email: string
+    ) {
+        this.email = email;
     }
 
 }

@@ -16,7 +16,7 @@ class CreatePublicUseCase {
     constructor(publicRepository) {
         this.publicRepository = publicRepository;
     }
-    create(uuid, idUser, description, url_file, type_file) {
+    create(uuid, idUser, description, url_file, type_file, userName, userNickName) {
         return __awaiter(this, void 0, void 0, function* () {
             let post = new publicationValidation_1.ValidationCreatePublic(uuid, idUser, description, url_file, type_file);
             const validation = yield (0, class_validator_1.validate)(post);
@@ -24,7 +24,7 @@ class CreatePublicUseCase {
                 throw new Error(JSON.stringify(validation));
             }
             try {
-                const newPublic = yield this.publicRepository.createPublicFile(uuid, idUser, description, url_file, type_file);
+                const newPublic = yield this.publicRepository.createPublicFile(uuid, idUser, description, url_file, type_file, userName, userNickName);
                 return newPublic;
             }
             catch (error) {

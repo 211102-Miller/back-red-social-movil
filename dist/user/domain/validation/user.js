@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ValidatorFilter = exports.ValidateLogin = exports.ValidatorupdatePassword = exports.ValidatorUpdate = exports.ValidatorId = exports.ValidatorCreateUser = void 0;
+exports.ValidatorFilter = exports.ValidateLogin = exports.ValidateEmail = exports.ValidatorupdatePassword = exports.ValidatorUpdate = exports.ValidatorId = exports.ValidatorCreateUser = void 0;
 const class_validator_1 = require("class-validator");
 class ValidatorCreateUser {
     constructor(uuid, name, last_name, nick_name, phone_number, email, password, status) {
@@ -126,22 +126,33 @@ __decorate([
     __metadata("design:type", String)
 ], ValidatorUpdate.prototype, "email", void 0);
 class ValidatorupdatePassword {
-    constructor(uuid, password) {
-        this.uuid = uuid;
+    constructor(email, password) {
+        this.email = email;
         this.password = password;
     }
 }
 exports.ValidatorupdatePassword = ValidatorupdatePassword;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
-], ValidatorupdatePassword.prototype, "uuid", void 0);
+], ValidatorupdatePassword.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ValidatorupdatePassword.prototype, "password", void 0);
+class ValidateEmail {
+    constructor(email) {
+        this.email = email;
+    }
+}
+exports.ValidateEmail = ValidateEmail;
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], ValidateEmail.prototype, "email", void 0);
 class ValidateLogin {
     constructor(email, password) {
         this.email = email,

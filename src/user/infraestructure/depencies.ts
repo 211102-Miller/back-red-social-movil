@@ -24,6 +24,10 @@ import { LoginUserController } from "./controllers/loginUserController";
 import { GetUserByFilterUseCase } from "../application/getUserByFilterUseCase";
 import { GetUserByFilterController } from "./controllers/getUserByFilterController";
 
+import { GetByEmialUseCase } from "../application/getByEmailUseCase";
+import { GetByEmailController } from "./controllers/getByEmailController";
+
+
 export const mysqlUserRepository = new MysqlUserRepository();
 
 export const createUserUseCase = new CreateUserUseCase(mysqlUserRepository)
@@ -44,10 +48,12 @@ export const deleteUserController = new DeleteUserController(deleteUserUseCase);
 export const updatePasswordUseCase = new UpdatePasswordUseCase(mysqlUserRepository);
 export const updatePasswordController = new UpdatePasswordController(updatePasswordUseCase);
 
-export const loginUserUseCase = new LoginUserUseCase(mysqlUserRepository);
-export const loginUserController = new LoginUserController(loginUserUseCase);
-
 export const getUserByFilterUseCase = new GetUserByFilterUseCase(mysqlUserRepository);
 export const getUserByFilterController = new GetUserByFilterController(getUserByFilterUseCase);
 
+export const getByEmialUseCase = new GetByEmialUseCase(mysqlUserRepository);
+export const getByEmailController = new GetByEmailController(getByEmialUseCase);
+
+export const loginUserUseCase = new LoginUserUseCase(mysqlUserRepository);
+export const loginUserController = new LoginUserController(loginUserUseCase,getByEmialUseCase);
 

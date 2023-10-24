@@ -1,4 +1,3 @@
-import { Console } from "console";
 import { query } from "../../database/msql";
 import { Public } from "../domain/public";
 import { PublicRepository } from "../domain/publicRepository";
@@ -6,35 +5,32 @@ import { PublicRepository } from "../domain/publicRepository";
 
 export class MysqlPublicRepository implements PublicRepository{
 
-    async createPublicFile(uuid: string, idUser: string, description: string, url_file: string, type_file: string): Promise<Public | null> {
+    async createPublicFile(uuid: string, idUser: string, description: string, url_file: string, type_file: string, userName: string, userNickName: string): Promise<Public | null> {
         try {
             // Primero, verifica si el usuario con el UUID existe en la base de datos
             const userCheckSql = `
-                SELECT * FROM users WHERE uuid = ?;
+                SELECT name, nick_name FROM users WHERE uuid = ?;
             `;
             const userCheckParams = [idUser];
-            console.log(userCheckParams)
 
             const [userResult]: any = await query(userCheckSql, userCheckParams);
 
             if (userResult.length === 0) {
                 // El usuario con el UUID proporcionado no existe en la base de datos
-                console.log("dasdasdasd")
                 return null;
-                
             }
 
             // El usuario existe, ahora puedes insertar el nuevo registro en la tabla "public"
             const sql = `
-                INSERT INTO public (uuid, idUser, description, url_file, type_file)
-                VALUES (?, ?, ?, ?, ?);
+                INSERT INTO public (uuid, idUser, description, url_file, type_file, userName, userNickName)
+                VALUES (?, ?, ?, ?, ?, ?, ?);
             `;
-            const params = [uuid, idUser, description, url_file, type_file];
+            const params = [uuid, idUser, description, url_file, type_file, userName, userNickName];
             const [result]: any = await query(sql, params);
 
-            const newPublic: Public = new Public(uuid, idUser, description, url_file, type_file);
-            return newPublic;
+            const newPublic: Public = new Public(uuid, idUser, description, url_file, type_file, userName, userNickName);
 
+            return newPublic;
         } catch (error) {
             console.error("Error adding content:", error);
             return null;
@@ -56,6 +52,8 @@ export class MysqlPublicRepository implements PublicRepository{
                     row.description,
                     row.url_file,
                     row.type_file,
+                    row.userName,
+                    row.userNickName,
                 );
             });
 
@@ -84,6 +82,8 @@ export class MysqlPublicRepository implements PublicRepository{
                 row.description,
                 row.url_file,
                 row.type_file,
+                row.userName,
+                row.userNickName,
             );
 
             return publics;
@@ -107,7 +107,9 @@ export class MysqlPublicRepository implements PublicRepository{
                     publicData.idUser,
                     publicData.description,
                     publicData.url_file,
-                    publicData.type_file
+                    publicData.type_file,
+                    publicData.userName,
+                    publicData.userNickName,
                 ));
     
                 return publicsUser;
@@ -137,6 +139,8 @@ export class MysqlPublicRepository implements PublicRepository{
                 updatedRows[0].description,
                 updatedRows[0].url_file,
                 updatedRows[0].type_file,
+                updatedRows[0].userName,
+                updatedRows[0].userNickName,
             );
     
             return updatedDescription;

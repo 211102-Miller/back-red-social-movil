@@ -12,6 +12,7 @@ exports.userRoutes.post("/login", depencies_1.loginUserController.run.bind(depen
 exports.userRoutes.post("/register", depencies_1.createUserController.run.bind(depencies_1.createUserController));
 // Middleware para verificar el token en las rutas siguientes
 exports.userRoutes.use(verifiqueToken_1.validateToken);
+exports.userRoutes.get("/email", depencies_1.getByEmailController.get.bind(depencies_1.getByEmailController));
 exports.userRoutes.get("/all", depencies_1.getAllUsersController.allUser.bind(depencies_1.getAllUsersController));
 exports.userRoutes.get("/:uuid", depencies_1.getByIdCoontroller.run.bind(depencies_1.getByIdCoontroller));
 exports.userRoutes.put("/update", depencies_1.updateUserByIdController.update.bind(depencies_1.updateUserByIdController));

@@ -11,14 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginUserController = void 0;
 class LoginUserController {
-    constructor(loginUserController) {
+    constructor(loginUserController, getByEmialUseCase) {
         this.loginUserController = loginUserController;
+        this.getByEmialUseCase = getByEmialUseCase;
     }
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { email, password } = req.body;
                 let loginUser = yield this.loginUserController.run(email, password);
+                const getUserInfo = yield this.getByEmialUseCase.get(email);
                 if (loginUser === 'Unauthorized') {
                     return res.status(401).send({
                         status: "Unauthorized",
@@ -32,7 +34,8 @@ class LoginUserController {
                 }
                 if (loginUser) {
                     return res.status(201).send({
-                        token: loginUser
+                        token: loginUser,
+                        userId: getUserInfo === null || getUserInfo === void 0 ? void 0 : getUserInfo.uuid
                     });
                 }
             }

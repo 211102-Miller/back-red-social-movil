@@ -10,11 +10,11 @@ export class UpdatePasswordController {
         try {
 
             let {
-                uuid,
+                email,
                 password,
             } = req.body
 
-            let updatePasswor = await this.updatePasswordUseCase.updatePassword(uuid, password)
+            let updatePasswor = await this.updatePasswordUseCase.updatePassword(email, password)
 
             if (updatePasswor) {
                 return res.status(200).send({

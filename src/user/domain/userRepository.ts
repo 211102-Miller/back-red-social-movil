@@ -27,7 +27,7 @@ export interface UserRepository{
 
     deleteUser(uuid: string):Promise<string | null>;
 
-    updatePassword(uuid: string, password: string): Promise<User | null>
+    updatePassword(email: string, password: string): Promise<User | null>
 
     loginUser(email:string, password:string):Promise<string | null> 
 
@@ -38,4 +38,6 @@ export interface UserRepository{
         nick_name?:string,
         phone_number?: string
     ): Promise<User | User[] | null>
+
+    getByEmail(email:string):Promise<User | null>
 }

@@ -110,20 +110,32 @@ export class MysqlUserRepository implements UserRepository{
         }
     }
 
-    async updatePassword(uuid: string, password: string): Promise<User | null> {
+    async updatePassword(email: string, password: string): Promise<User | null> {
         try {
+            // Verificar si el correo electrónico existe en la base de datos
+            const checkUserSql = 'SELECT * FROM users WHERE email = ?';
+            const [userRows]: any = await query(checkUserSql, [email]);
+            if (userRows.length === 0) {
+                // El correo electrónico no existe en la base de datos
+                return null;
+            }
+    
             // Asumiendo que 'password' ya está cifrado.
-            const hashPassword = await encrypt(password)
-            const sql = 'UPDATE users SET password = ? WHERE uuid = ?';
-            const result: any = await query(sql, [hashPassword, uuid]);
-
+            const hashPassword = await encrypt(password);
+            const updateSql = 'UPDATE users SET password = ? WHERE email = ?';
+            const result: any = await query(updateSql, [hashPassword, email]);
+    
             // Verificar si se actualizó alguna fila
-            if (!result || result.affectedRows === 0) return null;
-
+            if (!result || result.affectedRows === 0) {
+                return null;
+            }
+    
             // Obtener el usuario actualizado
-            const [updatedRows]: any = await query('SELECT * FROM users WHERE uuid = ?', [uuid]);
-            if (updatedRows.length === 0) return null;
-
+            const [updatedRows]: any = await query('SELECT * FROM users WHERE email = ?', [email]);
+            if (updatedRows.length === 0) {
+                return null;
+            }
+    
             const updatedUser = new User(
                 updatedRows[0].uuid,
                 updatedRows[0].name,
@@ -134,13 +146,14 @@ export class MysqlUserRepository implements UserRepository{
                 updatedRows[0].password,
                 updatedRows[0].status
             );
-
+    
             return updatedUser;
         } catch (error) {
             console.error('Error updating password:', error);
             throw error; // O maneja el error de la manera que prefieras.
         }
     }
+    
     async loginUser(email: string, password: string): Promise<string | null> {
         try {
             // Primero, obtener el usuario por email.
@@ -215,6 +228,20 @@ export class MysqlUserRepository implements UserRepository{
         } catch (error) {
             console.error(error);
             return null;
+        }
+    }
+    async getByEmail(email: string): Promise<User | null> {
+        try {
+            const sql = "SELECT * FROM users WHERE email = ? LIMIT 1"; // SQL para obtener un usuario por uuid
+            const [rows]: any = await query(sql, [email]); // Ejecutamos la consulta, pasando el uuid como parámetro
+
+            if (!rows || rows.length === 0) return null; // Si no hay resultados, retornamos null        
+            const row = rows[0]; // Tomamos el primer resultado (ya que uuid debería ser único)
+            // Retornamos una nueva instancia de User con los datos obtenidos
+            return new User(row.uuid, row.name, row.last_name, row.nick_name,row.phone_number, row.email, row.password,row.status);
+        } catch (error) {
+            console.error(error);
+            return null; // En caso de error, retornamos null
         }
     }
 

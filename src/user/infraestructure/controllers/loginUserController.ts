@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { LoginUserUseCase } from "../../application/loginUserUseCase";
+import { GetByEmialUseCase } from "../../application/getByEmailUseCase";
 
 export class LoginUserController {
-    constructor(readonly loginUserController: LoginUserUseCase) {}
+    constructor(
+        readonly loginUserController: LoginUserUseCase,
+        readonly getByEmialUseCase:GetByEmialUseCase
+        ) {}
 
     async run(req:Request,res:Response) {
         
@@ -11,6 +15,9 @@ export class LoginUserController {
             let {email,password} = req.body
     
             let loginUser = await this.loginUserController.run(email, password)
+
+            const getUserInfo = await this.getByEmialUseCase.get(email as string);
+
             
             if(loginUser === 'Unauthorized'){
                 return res.status(401).send({
@@ -25,7 +32,8 @@ export class LoginUserController {
             }
             if (loginUser) {
                 return res.status(201).send({
-                   token: loginUser
+                   token: loginUser,
+                   userId: getUserInfo?.uuid
                 })
             }
              

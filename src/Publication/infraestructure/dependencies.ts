@@ -19,11 +19,18 @@ import {DetelePublicationUseCase} from "../application/deletePublicationUseCase"
 import { DeletePublicationController } from "./controllers/deletePublicationController";
 
 
+import { GetByIdUseCase } from "../../user/application/getByIdUseCase";
+import { MysqlUserRepository } from "../../user/infraestructure/mysqlUserRepository";
+
+
 
 export const mysqlPublicRepository = new MysqlPublicRepository();
+export const mysqlUserRepository = new MysqlUserRepository();
+
+export const getByIdUseCase= new GetByIdUseCase(mysqlUserRepository);
 
 export const createPublicUseCase = new CreatePublicUseCase(mysqlPublicRepository);
-export const createPublicController = new CreatePublicController(createPublicUseCase);
+export const createPublicController = new CreatePublicController(createPublicUseCase,getByIdUseCase);
 
 export const getAllPublicationsUseCase = new GetAllPublicationsUseCase(mysqlPublicRepository);
 export const geAllPublicationsController = new GetAllPublicationsController(getAllPublicationsUseCase);

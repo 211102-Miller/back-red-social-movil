@@ -116,20 +116,29 @@ class MysqlUserRepository {
             }
         });
     }
-    updatePassword(uuid, password) {
+    updatePassword(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                // Verificar si el correo electrónico existe en la base de datos
+                const checkUserSql = 'SELECT * FROM users WHERE email = ?';
+                const [userRows] = yield (0, msql_1.query)(checkUserSql, [email]);
+                if (userRows.length === 0) {
+                    // El correo electrónico no existe en la base de datos
+                    return null;
+                }
                 // Asumiendo que 'password' ya está cifrado.
                 const hashPassword = yield (0, ashs_1.encrypt)(password);
-                const sql = 'UPDATE users SET password = ? WHERE uuid = ?';
-                const result = yield (0, msql_1.query)(sql, [hashPassword, uuid]);
+                const updateSql = 'UPDATE users SET password = ? WHERE email = ?';
+                const result = yield (0, msql_1.query)(updateSql, [hashPassword, email]);
                 // Verificar si se actualizó alguna fila
-                if (!result || result.affectedRows === 0)
+                if (!result || result.affectedRows === 0) {
                     return null;
+                }
                 // Obtener el usuario actualizado
-                const [updatedRows] = yield (0, msql_1.query)('SELECT * FROM users WHERE uuid = ?', [uuid]);
-                if (updatedRows.length === 0)
+                const [updatedRows] = yield (0, msql_1.query)('SELECT * FROM users WHERE email = ?', [email]);
+                if (updatedRows.length === 0) {
                     return null;
+                }
                 const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].last_name, updatedRows[0].nick_name, updatedRows[0].phone_number, updatedRows[0].email, updatedRows[0].password, updatedRows[0].status);
                 return updatedUser;
             }
@@ -207,6 +216,23 @@ class MysqlUserRepository {
             catch (error) {
                 console.error(error);
                 return null;
+            }
+        });
+    }
+    getByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = "SELECT * FROM users WHERE email = ? LIMIT 1"; // SQL para obtener un usuario por uuid
+                const [rows] = yield (0, msql_1.query)(sql, [email]); // Ejecutamos la consulta, pasando el uuid como parámetro
+                if (!rows || rows.length === 0)
+                    return null; // Si no hay resultados, retornamos null        
+                const row = rows[0]; // Tomamos el primer resultado (ya que uuid debería ser único)
+                // Retornamos una nueva instancia de User con los datos obtenidos
+                return new user_1.User(row.uuid, row.name, row.last_name, row.nick_name, row.phone_number, row.email, row.password, row.status);
+            }
+            catch (error) {
+                console.error(error);
+                return null; // En caso de error, retornamos null
             }
         });
     }
