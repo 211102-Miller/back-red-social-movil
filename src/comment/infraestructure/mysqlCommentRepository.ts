@@ -4,7 +4,7 @@ import { CommentRespository } from "../domain/commetRepository";
 
 
 export class MysqlCommentRepository implements CommentRespository{
-    async createComment(uuid: string, id_user: string, id_public: string, text: string): Promise<Comment | null> {
+    async createComment(uuid: string, id_user: string, id_public: string, text: string,userName:string,userNickName:string): Promise<Comment | null> {
         try {
             // Verifica si el usuario con el ID existe en la base de datos
             const userCheckSql = 'SELECT * FROM users WHERE uuid = ?';
@@ -28,13 +28,13 @@ export class MysqlCommentRepository implements CommentRespository{
 
     
             const sql = `
-                INSERT INTO comments (uuid, id_user, id_public, text)
-                VALUES (?, ?, ?, ?);
+                INSERT INTO comments (uuid, id_user, id_public, text, userName, userNickname)
+                VALUES (?, ?, ?, ?, ?, ?);
             `;
-            const params = [uuid, id_user, id_public, text];
+            const params = [uuid, id_user, id_public, text, userName, userNickName];
             const [result]: any = await query(sql, params);
     
-            const newReaction: Comment = new Comment(uuid, id_user, id_public, text);
+            const newReaction: Comment = new Comment(uuid, id_user, id_public, text,userName,userNickName);
             return newReaction;
     
         } catch (error) {
@@ -57,7 +57,9 @@ export class MysqlCommentRepository implements CommentRespository{
                     row.uuid,
                     row.id_user,
                     row.id_public,
-                    row.text // Corregido para coincidir con la estructura de la tabla
+                    row.text,
+                    row.userName,
+                    row.userNickName // Corregido para coincidir con la estructura de la tabla
                 );
             });
     
@@ -82,6 +84,8 @@ export class MysqlCommentRepository implements CommentRespository{
                     Data.id_user,
                     Data.id_public,
                     Data.text,
+                    Data.userName,
+                    Data.userNickName
                 ));
     
                 return reactionUser;
@@ -110,6 +114,8 @@ export class MysqlCommentRepository implements CommentRespository{
                 updatedRows[0].id_user,
                 updatedRows[0].id_public,
                 updatedRows[0].text,
+                updatedRows[0].userName,
+                updatedRows[0].userNickName
             );
     
             return updatedDescription;

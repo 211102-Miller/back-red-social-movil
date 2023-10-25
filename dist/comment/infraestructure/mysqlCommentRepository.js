@@ -13,7 +13,7 @@ exports.MysqlCommentRepository = void 0;
 const comment_1 = require("../domain/comment");
 const msql_1 = require("../../database/msql");
 class MysqlCommentRepository {
-    createComment(uuid, id_user, id_public, text) {
+    createComment(uuid, id_user, id_public, text, userName, userNickName) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Verifica si el usuario con el ID existe en la base de datos
@@ -33,12 +33,12 @@ class MysqlCommentRepository {
                     return null;
                 }
                 const sql = `
-                INSERT INTO comments (uuid, id_user, id_public, text)
-                VALUES (?, ?, ?, ?);
+                INSERT INTO comments (uuid, id_user, id_public, text, userName, userNickname)
+                VALUES (?, ?, ?, ?, ?, ?);
             `;
-                const params = [uuid, id_user, id_public, text];
+                const params = [uuid, id_user, id_public, text, userName, userNickName];
                 const [result] = yield (0, msql_1.query)(sql, params);
-                const newReaction = new comment_1.Comment(uuid, id_user, id_public, text);
+                const newReaction = new comment_1.Comment(uuid, id_user, id_public, text, userName, userNickName);
                 return newReaction;
             }
             catch (error) {
@@ -56,7 +56,7 @@ class MysqlCommentRepository {
                     return null;
                 }
                 const comments = rows.map(row => {
-                    return new comment_1.Comment(row.uuid, row.id_user, row.id_public, row.text // Corregido para coincidir con la estructura de la tabla
+                    return new comment_1.Comment(row.uuid, row.id_user, row.id_public, row.text, row.userName, row.userNickName // Corregido para coincidir con la estructura de la tabla
                     );
                 });
                 return comments;
@@ -75,7 +75,7 @@ class MysqlCommentRepository {
                 const [result] = yield (0, msql_1.query)(sql, params);
                 if (result && result.length > 0) {
                     // Mapea los resultados en objetos Public
-                    const reactionUser = result.map((Data) => new comment_1.Comment(Data.uuid, Data.id_user, Data.id_public, Data.text));
+                    const reactionUser = result.map((Data) => new comment_1.Comment(Data.uuid, Data.id_user, Data.id_public, Data.text, Data.userName, Data.userNickName));
                     return reactionUser;
                 }
                 else {
@@ -100,7 +100,7 @@ class MysqlCommentRepository {
                 const [updatedRows] = yield (0, msql_1.query)('SELECT * FROM comments WHERE uuid = ?', [uuid]);
                 if (updatedRows.length === 0)
                     return null;
-                const updatedDescription = new comment_1.Comment(updatedRows[0].uuid, updatedRows[0].id_user, updatedRows[0].id_public, updatedRows[0].text);
+                const updatedDescription = new comment_1.Comment(updatedRows[0].uuid, updatedRows[0].id_user, updatedRows[0].id_public, updatedRows[0].text, updatedRows[0].userName, updatedRows[0].userNickName);
                 return updatedDescription;
             }
             catch (error) {

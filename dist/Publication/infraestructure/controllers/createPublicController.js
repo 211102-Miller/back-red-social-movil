@@ -24,64 +24,69 @@ class CreatePublicController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { idUser, description } = req.body;
-                // Asegúrate de que un archivo fue enviado
-                if (!req.files || !req.files.url_file) {
+                if (!idUser || !description) {
                     return res.status(400).send({
                         status: "error",
-                        message: "No image file uploaded."
+                        message: "Missing required fields (idUser or description)."
                     });
                 }
                 // Castear el archivo a UploadedFile (express-fileupload)
-                const imgFile = req.files.url_file;
-                // Genera un nombre único para el archivo basado en la fecha y el nombre original
-                const uniqueName = `${Date.now()}-${imgFile.name}`;
-                // Obtiene la extensión del archivo desde su nombre
-                const fileExtension = imgFile.name.split('.').pop();
-                let type_file = '';
-                if (fileExtension) {
-                    switch (fileExtension.toLowerCase()) {
-                        case 'png':
-                            type_file = 'image/png';
-                            break;
-                        case 'jpg':
-                        case 'jpeg':
-                            type_file = 'image/jpeg';
-                            break;
-                        case 'mp4':
-                            type_file = 'video/mp4';
-                            break;
-                        case 'gif':
-                            type_file = 'image/gif';
-                            break;
-                        case 'mp3':
-                            type_file = 'audio/mpeg';
-                            break;
-                        case 'wav':
-                            type_file = 'audio/wav';
-                            break;
-                        case 'avi':
-                            type_file = 'video/x-msvideo';
-                            break;
-                        case 'mov':
-                            type_file = 'video/quicktime';
-                            break;
-                        case 'oog':
-                            type_file = 'audio/ogg'; // Agrega esta línea para archivos "oog"
-                            break;
-                        case 'aac':
-                            type_file = 'audio/aac'; // Agrega el tipo de archivo AAC
-                            break;
+                const imgFile = req.files ? req.files.url_file : null;
+                let url_file = null;
+                let type_file = null;
+                if (imgFile) {
+                    // Genera un nombre único para el archivo basado en la fecha y el nombre original
+                    const uniqueName = `${Date.now()}-${imgFile.name}`;
+                    // Obtiene la extensión del archivo desde su nombre
+                    const fileExtension = imgFile.name.split('.').pop();
+                    if (fileExtension) {
+                        switch (fileExtension.toLowerCase()) {
+                            case 'png':
+                                type_file = 'image/png';
+                                break;
+                            case 'jpg':
+                            case 'jpeg':
+                                type_file = 'image/jpeg';
+                                break;
+                            case 'mp4':
+                                type_file = 'video/mp4';
+                                break;
+                            case 'gif':
+                                type_file = 'image/gif';
+                                break;
+                            case 'mp3':
+                                type_file = 'audio/mpeg';
+                                break;
+                            case 'wav':
+                                type_file = 'audio/wav';
+                                break;
+                            case 'avi':
+                                type_file = 'video/x-msvideo';
+                                break;
+                            case 'mov':
+                                type_file = 'video/quicktime';
+                                break;
+                            case 'oog':
+                                type_file = 'audio/ogg'; // Agrega esta línea para archivos "oog"
+                                break;
+                            case 'aac':
+                                type_file = 'audio/aac'; // Agrega el tipo de archivo AAC
+                                break;
+                            case '""':
+                                type_file = 'audio/aac'; // Agrega el tipo de archivo AAC
+                                break;
+                        }
+                    }
+                    if (type_file) {
+                        url_file = yield (0, saveImg_1.default)(imgFile, type_file);
                     }
                 }
                 const miuuid = (0, uuid_1.v4)();
                 // Obtén información del usuario utilizando GetByIdUseCase
                 const getUserInfo = yield this.getByIdUseCase.getId(idUser);
                 if (getUserInfo) {
-                    const url_file = yield (0, saveImg_1.default)(imgFile, type_file);
-                    console.log('userName:', getUserInfo.name);
-                    console.log('userNickName:', getUserInfo.nick_name);
                     // Llama a createPublicFile con información del usuario
-                    let newPublic = yield this.createPublicUseCase.create(miuuid, idUser, description, url_file, type_file, getUserInfo.name, // Nombre del usuario
+                    let newPublic = yield this.createPublicUseCase.create(miuuid, idUser, description, url_file || "", type_file || "text/plain", getUserInfo.name, // Nombre del usuario
                     getUserInfo.nick_name // Nickname del usuario
                     );
                     if (newPublic) {

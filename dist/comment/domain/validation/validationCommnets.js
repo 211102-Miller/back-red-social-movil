@@ -12,11 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidatorUpdateComment = exports.ValidatorId = exports.ValidationCreateCommnets = void 0;
 const class_validator_1 = require("class-validator");
 class ValidationCreateCommnets {
-    constructor(uuid, id_user, id_public, text) {
+    constructor(uuid, id_user, id_public, text, userName, userNickName) {
         this.uuid = uuid,
             this.id_user = id_user,
             this.id_public = id_public,
             this.text = text;
+        this.userName = userName,
+            this.userNickName = userNickName;
     }
 }
 exports.ValidationCreateCommnets = ValidationCreateCommnets;
@@ -40,6 +42,16 @@ __decorate([
     (0, class_validator_1.Length)(1, 500),
     __metadata("design:type", String)
 ], ValidationCreateCommnets.prototype, "text", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ValidationCreateCommnets.prototype, "userName", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ValidationCreateCommnets.prototype, "userNickName", void 0);
 class ValidatorId {
     constructor(uuid) {
         this.uuid = uuid;

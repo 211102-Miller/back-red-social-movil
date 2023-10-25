@@ -37,12 +37,10 @@ __decorate([
     __metadata("design:type", String)
 ], ValidationCreatePublic.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ValidationCreatePublic.prototype, "img_uer", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ValidationCreatePublic.prototype, "type_file", void 0);

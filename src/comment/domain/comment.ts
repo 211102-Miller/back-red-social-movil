@@ -4,5 +4,7 @@ export class Comment{
         public id_user:string,
         public id_public:string,
         public text:string,
+        public userName: String,
+        public userNicKName:String
     ){}
 }

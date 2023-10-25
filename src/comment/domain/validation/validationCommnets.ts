@@ -18,17 +18,30 @@ export class ValidationCreateCommnets{
     @Length(1, 500)
     public text: string;
 
+    @IsNotEmpty()
+    @IsString()
+    public userName: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public userNickName: string;
+
+
     
     constructor(
         uuid: string,
         id_user: string,
         id_public: string,
         text: string,
+        userName: string,
+        userNickName: string
     ) {
         this.uuid = uuid,
         this.id_user = id_user,
         this.id_public = id_public,
         this.text = text
+        this.userName = userName,
+        this.userNickName = userNickName;
     }
     
 }

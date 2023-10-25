@@ -7,6 +7,8 @@ export interface CommentRespository{
         id_user:string,
         id_public:string,
         text:string,
+        userName:string,
+        userNicKName:string,
     ):Promise<Comment | null>;
 
     getAllComments():Promise<Comment[] | null>;

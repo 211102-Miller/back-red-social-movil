@@ -5,16 +5,16 @@ import { validate } from "class-validator";
 export class CreateCommentUseCase{
     constructor(readonly commentRespository: CommentRespository){}
 
-    async run(uuid: string,id_user: string,id_public: string,text: string ):Promise<Comment | null>{
+    async run(uuid: string,id_user: string,id_public: string,text: string, userName:string,userNickName:string ):Promise<Comment | null>{
         
-        let post = new ValidationCreateCommnets(uuid,id_user,id_public,text)
+        let post = new ValidationCreateCommnets(uuid,id_user,id_public,text,userName,userNickName)
         const validation = await validate(post)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
 
         try {
-            const create = await this.commentRespository.createComment(uuid,id_user, id_public, text);
+            const create = await this.commentRespository.createComment(uuid,id_user, id_public, text,userName,userNickName);
             return create;
         } catch (error) {
             return null;

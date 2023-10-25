@@ -15,11 +15,18 @@ import { UpdateCommnetController } from "./controller/updateCommentController";
 import { DeleteCommentUseCase } from "../application/deleteCommnetUseCase";
 import { DeleteCommentController } from "./controller/deleteCommnetsController";
 
+import { MysqlUserRepository } from "../../user/infraestructure/mysqlUserRepository";
+import { GetByIdUseCase } from "../../user/application/getByIdUseCase";
+
 export const mysqlCommentRepository = new MysqlCommentRepository();
+export const mysqlUserRepository = new MysqlUserRepository();
+
+export const getByIdUseCase = new GetByIdUseCase(mysqlUserRepository);
+
 
 
 export const createCommentUseCase = new CreateCommentUseCase(mysqlCommentRepository);
-export const createCommentController = new CreateCommentController(createCommentUseCase);
+export const createCommentController = new CreateCommentController(createCommentUseCase,getByIdUseCase);
 
 export const getAllCommentsUseCase = new GetAllCommentsUseCase (mysqlCommentRepository)
 export const getAllCommnetsController = new GetAllCommnetsController(getAllCommentsUseCase);

@@ -14,12 +14,9 @@ export class ValidationCreatePublic{
     @Length(1, 500)
     public description: string;
 
-    @IsNotEmpty()
     @IsString()
     public img_uer: string;
 
-
-    @IsNotEmpty()
     @IsString()
     public type_file: string;
 

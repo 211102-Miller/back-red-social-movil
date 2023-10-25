@@ -12,16 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCommentController = void 0;
 const uuid_1 = require("uuid");
 class CreateCommentController {
-    constructor(createCommentUseCase) {
+    constructor(createCommentUseCase, getByIdUseCase) {
         this.createCommentUseCase = createCommentUseCase;
+        this.getByIdUseCase = getByIdUseCase;
     }
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { id_user, id_public, text } = req.body;
                 const miuuid = (0, uuid_1.v4)();
-                const create = yield this.createCommentUseCase.run(miuuid, id_user, id_public, text);
-                if (create) {
+                const getUserInfo = yield this.getByIdUseCase.getId(id_user);
+                if (getUserInfo) {
+                    const create = yield this.createCommentUseCase.run(miuuid, id_user, id_public, text, getUserInfo === null || getUserInfo === void 0 ? void 0 : getUserInfo.name, getUserInfo === null || getUserInfo === void 0 ? void 0 : getUserInfo.nick_name);
                     return res.status(201).send({
                         status: "success",
                         data: {

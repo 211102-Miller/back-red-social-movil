@@ -16,15 +16,15 @@ class CreateCommentUseCase {
     constructor(commentRespository) {
         this.commentRespository = commentRespository;
     }
-    run(uuid, id_user, id_public, text) {
+    run(uuid, id_user, id_public, text, userName, userNickName) {
         return __awaiter(this, void 0, void 0, function* () {
-            let post = new validationCommnets_1.ValidationCreateCommnets(uuid, id_user, id_public, text);
+            let post = new validationCommnets_1.ValidationCreateCommnets(uuid, id_user, id_public, text, userName, userNickName);
             const validation = yield (0, class_validator_1.validate)(post);
             if (validation.length > 0) {
                 throw new Error(JSON.stringify(validation));
             }
             try {
-                const create = yield this.commentRespository.createComment(uuid, id_user, id_public, text);
+                const create = yield this.commentRespository.createComment(uuid, id_user, id_public, text, userName, userNickName);
                 return create;
             }
             catch (error) {
